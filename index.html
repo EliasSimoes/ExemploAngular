@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html ng-app="CadClientes">
+  <head>
+    <meta charset="utf-8">
+    <!-- js -->
+    <script src="public/angular/angular.js"></script>
+    <script src="public/angular/i18n/angular-locale_pt-br.js"></script>
+    <script src="controllers/controller.js"></script>
+    <script src="diretivas/directive.js"></script>
+
+
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="public/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="public/bootstrap/css/style.css">
+
+    <title>Bem Vindos</title>
+  </head>
+  <body ng-controller="CadClientesCtrl">
+    <div class="jumbotron">
+
+      <h2>{{app}}</h2>
+    <hr>
+
+    <div dir-alerta>
+    </div>
+
+    <input class="form-control" type="text" placeholder="Busque por contatos" ng-model="buscar">
+
+    <table class="table">
+      <tr>
+        <td></td>
+        <td><b>Nome</b></td>
+        <td><b>Número do contrato</b></td>
+        <td><b>Valor do contrato</b></td>
+        <td><b>Tipo de cliente</b></td>
+        <td><b>Data do cadastro</b></td>
+      </tr>
+      <tr ng-class="{'selecionado negrito': cliente.selecionado}"
+          ng-repeat="cliente in clientes | filter:buscar | orderBy:'name'">
+        <td><input type="checkbox" ng-model="cliente.selecionado"></td>
+        <td>{{cliente.nome}}</td>
+        <td>{{cliente.codigo}}</td>
+        <td>{{cliente.valor | currency}}</td>
+        <td>{{cliente.tiposCliente.tipo}}</td>
+        <td>{{cliente.data | date: 'dd/MM/yyyy HH:mm'}}</td>
+      </tr>
+    </table>
+    <hr>
+
+    <form class="" name="clienteForm">
+
+    <input class="form-control" type="text" ng-model="cliente.nome" placeholder="Nome" ng-required="true">
+    <input class="form-control"  type="text" ng-model="cliente.codigo" placeholder="Insira o número do contrato" ng-required="true">
+    <input class="form-control"  type="text" ng-model="cliente.valor" placeholder="insira o valor do contrato" ng-required="true">
+
+    <select class="form-control"
+            ng-model="cliente.tiposCliente"
+            ng-options="tiposC.tipo group by tiposC.local for tiposC in tiposCliente"
+            ng-required="true">
+
+      <option value="">Selecione um tipo de cliente</option>
+    </select>
+    </form>
+    <button class="btn btn-primary btn-block" ng-click="adicionarCliente(cliente)" ng-disabled="clienteForm.$invalid">
+      Adicionar cliente
+    </button>
+    <button class="btn btn-danger btn-block" ng-click="apagarCliente(clientes)" ng-if="checkSelecionado(clientes)">
+      Apagar cliente
+    </button>
+
+    </div>
+  </body>
+</html>
